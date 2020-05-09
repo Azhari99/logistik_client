@@ -46,5 +46,4 @@
 
 <?php $this->load->view('product/actProduct') ?>
 <?php $this->load->view('product_in/actPIn') ?>
-<?php $this->load->view('product_out/actPOut') ?>
 <?php $this->load->view('request_out/actPOut') ?>

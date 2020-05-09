@@ -8,11 +8,11 @@ class M_requestout extends CI_Model
 	private $_client;
 
 	public function __construct()
-    {
-        $this->_client = new Client([
-            'base_uri'  => 'http://localhost/rest-api/wpu-rest-server/projectinventory/api/'
-        ]);
-    }
+	{
+		$this->_client = new Client([
+			'base_uri'  => 'http://localhost/rest-api/wpu-rest-server/projectinventory/api/'
+		]);
+	}
 
 	public function list()
 	{
@@ -33,19 +33,34 @@ class M_requestout extends CI_Model
 	}
 
 	public function save($data)
-	{		
+	{
 		$this->db->insert($this->_table, $data);
 	}
 
 	public function savePermintaanApi($dataApi)
 	{
 		$response = $this->_client->request('POST', 'permintaan', [
-            'form_params' => $dataApi
+			'form_params' => $dataApi
 		]);
-		
+
 		$result = json_decode($response->getBody()->getContents(), true);
 
-        return $result;
+		return $result;
+	}
+
+	public function getBudgetApi($type_id, $trxYear)
+	{
+		$response = $this->_client->request('GET', 'budget', [
+			'query' => [
+				'key' => 'inv123',
+				'jenis_id' => $type_id,
+				'tahun' => $trxYear
+			]
+		]);
+
+		$result = json_decode($response->getBody()->getContents(), true);
+
+		return $result['data'];
 	}
 
 	public function listProductApi()
@@ -55,10 +70,10 @@ class M_requestout extends CI_Model
 				'key' => 'inv123'
 			]
 		]);
-		
+
 		$result = json_decode($response->getBody()->getContents(), true);
 
-        return $result['data'];
+		return $result['data'];
 	}
 
 	public function getDataApiByID($id)
@@ -69,10 +84,10 @@ class M_requestout extends CI_Model
 				'id' => $id
 			]
 		]);
-		
+
 		$result = json_decode($response->getBody()->getContents(), true);
 
-        return $result['data'];
+		return $result['data'];
 	}
 
 	public function listInstituteApi()
@@ -83,10 +98,10 @@ class M_requestout extends CI_Model
 				'id' => 3
 			]
 		]);
-		
+
 		$result = json_decode($response->getBody()->getContents(), true);
 
-        return $result['data'];
+		return $result['data'];
 	}
 
 	public function getInstansiByIdAPI($id)
@@ -97,10 +112,10 @@ class M_requestout extends CI_Model
 				'id' => $id
 			]
 		]);
-		
+
 		$result = json_decode($response->getBody()->getContents(), true);
 
-        return $result['data'];
+		return $result['data'];
 	}
 
 	public function update($data, $where)
@@ -119,39 +134,66 @@ class M_requestout extends CI_Model
 		return $this->db->delete($this->_table, array('tbl_permintaan_id' => $id));
 	}
 
-	public function generateCode() 
-	{		
+	public function generateCode()
+	{
 		$firstCode = "PROUT"; //karakter depan kodenya
 		$lastCode = ""; //kode awal
 		$separtor = '-';
-        $sql = $this->db->query("SELECT MAX(RIGHT(documentno,4)) AS maxcode 
-        						FROM ".$this->_table);
-        
-        if( $sql->num_rows() > 0 ) {
-            foreach($sql->result() as $value) {
-                $intCode = ((int)$value->maxcode) + 1;
-                $lastCode = sprintf("%04s", $intCode);
-            }
+		$sql = $this->db->query("SELECT MAX(RIGHT(documentno,4)) AS maxcode 
+        						FROM " . $this->_table);
 
-        } else {
-            $lastCode = "0001";
-        }
-        return $firstCode.$separtor.$lastCode;
-   }
+		if ($sql->num_rows() > 0) {
+			foreach ($sql->result() as $value) {
+				$intCode = ((int) $value->maxcode) + 1;
+				$lastCode = sprintf("%04s", $intCode);
+			}
+		} else {
+			$lastCode = "0001";
+		}
+		return $firstCode . $separtor . $lastCode;
+	}
 
-   public function totalQtyProduct($id, $datetrx) 
-   {
-   		$param = array(
-   				'tbl_barang_id' => $id,
-   				'DATE_FORMAT(datetrx, "%Y") =' => $datetrx
-   			);
-   		$this->db->select_sum('qtyentered');
-   		$this->db->where($param);
-   		$this->db->from($this->_table);
-   		return $this->db->get()->row();
-   }
+	public function totalRequestOut($id, $id_product, $datetrx)
+	{
+		if ($id == null) {
+			$sql = $this->db->query("SELECT sum(rk.amount) as amount,
+								sum(rk.qtyentered) as qtyentered
+								FROM tbl_permintaan rk
+								WHERE rk.tbl_barang_id = $id_product
+								AND YEAR(rk.datetrx) = $datetrx");
+		} else {
+			$sql = $this->db->query("SELECT sum(rk.amount) as amount,
+								sum(rk.qtyentered) as qtyentered
+								FROM tbl_permintaan rk
+								WHERE rk.tbl_barang_id = $id_product
+								AND YEAR(rk.datetrx) = $datetrx
+								AND rk.tbl_barangkeluar_id != $id ");
+		}
+		return $sql->row();
+	}
 
-   	public function totalProductOut()
+	public function totalInstituteOut($id_institute, $datetrx)
+	{
+		$sql = $this->db->query("SELECT sum(rk.amount) as amount
+								FROM tbl_permintaan rk
+								WHERE rk.tbl_instansi_id = $id_institute
+								AND YEAR(rk.datetrx) = $datetrx");
+		return $sql->row();
+	}
+
+	public function totalQtyProduct($id, $datetrx)
+	{
+		$param = array(
+			'tbl_barang_id' => $id,
+			'DATE_FORMAT(datetrx, "%Y") =' => $datetrx
+		);
+		$this->db->select_sum('qtyentered');
+		$this->db->where($param);
+		$this->db->from($this->_table);
+		return $this->db->get()->row();
+	}
+
+	public function totalProductOut()
 	{
 		$this->db->from($this->_table);
 		$query = $this->db->count_all_results();

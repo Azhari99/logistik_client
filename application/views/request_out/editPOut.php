@@ -65,6 +65,27 @@
                   <input type="number" class="form-control col-md-3 col-xs-12" id="qty_out" name="qty_out" readonly>
                 </div>
               </div>
+              <div class="item form-group" id="unitgroup_out">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="unitprice_out">Unit Price
+                </label>
+                <div class="col-md-3 col-sm-3 col-xs-12">
+                  <input type="text" class="form-control col-md-3 col-xs-12 rupiah" id="unitprice_out" name="unitprice_out" data-a-sign="Rp." data-a-dec="," data-a-sep=".">
+                </div>
+              </div>
+              <div class="item form-group" id="totalgroup_out">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="total_out">Total
+                </label>
+                <div class="col-md-3 col-sm-3 col-xs-12">
+                  <input type="text" class="form-control col-md-3 col-xs-12 rupiah" id="total_out" name="total_out" data-a-sign="Rp." data-a-dec="," data-a-sep=".">
+                </div>
+              </div>
+              <div class="item form-group" id="budgetgroup_out">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="budget_out">Budget
+                </label>
+                <div class="col-md-3 col-sm-3 col-xs-12">
+                  <input type="text" class="form-control col-md-3 col-xs-12 rupiah" id="budget_out" name="budget_out" data-a-sign="Rp." data-a-dec="," data-a-sep=".">
+                </div>
+              </div>
               <div class="item form-group">
                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="desc_out">Description
                 </label>
