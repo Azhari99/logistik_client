@@ -62,7 +62,7 @@
                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="qty_out">Quantity
                 </label>
                 <div class="col-md-3 col-sm-3 col-xs-12">
-                  <input type="number" class="form-control col-md-3 col-xs-12" id="qty_out" name="qty_out" readonly>
+                  <input type="number" class="form-control col-md-3 col-xs-12" id="qty_out" name="qty_out">
                 </div>
               </div>
               <div class="item form-group" id="unitgroup_out">

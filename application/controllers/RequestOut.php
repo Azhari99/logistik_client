@@ -42,7 +42,7 @@ class RequestOut extends CI_Controller
             if ($value->status == 'P') {
                 $row[] = '<center><span class="label label-info">Proses</span></center>';
                 $row[] = '';
-            }else if ($value->status == 'CO') {
+            } else if ($value->status == 'CO') {
                 $row[] = '<center><span class="label label-success">Proses</span></center>';
                 $row[] = '';
             } else {
@@ -222,6 +222,9 @@ class RequestOut extends CI_Controller
         $institute = $this->input->post('institute_out');
         $date = explode('/', $this->input->post('datetrx_out'));
         $qty = $this->input->post('qty_out');
+        $unitprice = changeFormat($this->input->post('unitprice_out'));
+        $total = changeFormat($this->input->post('total_out'));
+        $budget = changeFormat($this->input->post('budget_out'));
         $desc = $this->input->post('desc_out');
 
         $trxDay =  $date[0];
@@ -232,8 +235,32 @@ class RequestOut extends CI_Controller
         $produtDetail = $this->m_requestout->getDataApiByID($product);
         $instansiDetail = $this->m_requestout->getInstansiByIdAPI($institute);
 
+        //$namaProduct = $produtDetail[0]['name'];
+        //$namaInstansi = $instansiDetail[0]['name'];
+
+        $qtyAvailable = $produtDetail[0]['qtyavailable'];
+        $type_id = $produtDetail[0]['jenis_id'];
         $namaProduct = $produtDetail[0]['name'];
         $namaInstansi = $instansiDetail[0]['name'];
+        $budgetProduct = $produtDetail[0]['budget'];
+        $budget_detail = $this->m_requestout->getBudgetApi($type_id, $trxYear);
+        $sumRequestOut = $this->m_requestout->totalRequestOut(null, $product, $trxYear);
+        $sumInstituteOut = $this->m_requestout->totalInstituteOut($institute, $trxYear);
+        // var_dump($id_barang_out);
+        // die;
+        if ($type_id == 2) {
+            $qtyOut = $qty = $unitprice = 0;
+            $amount = $budget;
+            $instituteOut = $budget + $sumInstituteOut->amount;
+            $budgetOut = $budget + $sumRequestOut->amount;
+        } else {
+            $qtyOut = $qty + $sumRequestOut->qtyentered;
+            $amount = $total;
+            $instituteOut = $total + $sumInstituteOut->amount;
+            $budgetOut = $total;
+        }
+
+        $budgetIns = $instansiDetail[0]['budget'];
 
         if ($this->form_validation->run() == FALSE) {
             $data['product_out_id'] = $id_barang_out;
@@ -241,34 +268,67 @@ class RequestOut extends CI_Controller
             $data['institute'] = $this->m_requestout->listInstituteApi();
             $this->template->load('overview', 'request_out/editPOut', $data);
         } else {
-            if ($qty <= $produtDetail[0]['qtyavailable']) {
-                $param_out = array(
-                    'documentno'        => $code,
-                    'datetrx'           => $datetrx,
-                    'tbl_barang_id'     => $product,
-                    'nama_barang'       => $namaProduct,
-                    'tbl_instansi_id'   => $institute,
-                    'nama_instansi'     => $namaInstansi,
-                    'qtyentered'        => $qty,
-                    'status'            => 'DR',
-                    'keterangan'        => $desc,
-                    'updated'           => date('Y-m-d H:i:s')
-                );
-                $where_out = array('tbl_permintaan_id' => $id_barang_out);
-                $this->m_requestout->update($param_out, $where_out);
-                if ($this->db->affected_rows() > 0) {
-                    $this->session->set_flashdata('msg', '<div class="alert alert-success alert-dismissible fade in" role="alert">' .
-                        '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>' .
-                        '</button>' .
-                        'Data berhasil diubah</div>');
+            if ($budget_detail != null) {
+                $budgetYear = $budget_detail[0]['tahun'];
+                $status = $budget_detail[0]['status'];
+                if ($trxYear == $budgetYear && $status == 'O' && $budgetOut <= $budgetProduct && $instituteOut <= $budgetIns && $qtyOut <= $qtyAvailable) {
+                    $param_out = array(
+                        'documentno'        => $code,
+                        'datetrx'           => $datetrx,
+                        'tbl_barang_id'     => $product,
+                        'nama_barang'       => $namaProduct,
+                        'tbl_instansi_id'   => $institute,
+                        'nama_instansi'     => $namaInstansi,
+                        'qtyentered'        => $qty,
+                        'unitprice'         => $unitprice,
+                        'amount'            => $amount,
+                        'status'            => 'DR',
+                        'keterangan'        => $desc,
+                        'updated'           => date('Y-m-d H:i:s')
+                    );
+                    $where_out = array('tbl_permintaan_id' => $id_barang_out);
+                    $this->m_requestout->update($param_out, $where_out);
+                    if ($this->db->affected_rows() > 0) {
+                        $this->session->set_flashdata('msg', '<div class="alert alert-success alert-dismissible fade in" role="alert">' .
+                            '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>' .
+                            '</button>' .
+                            'Data berhasil diubah</div>');
+                    }
+                    echo "<script>window.location='" . site_url('requestout') . "';</script>";
+                } else {
+                    if ($status == 'C') {
+                        $this->session->set_flashdata('error', '<div class="alert alert-danger alert-dismissible fade in" role="alert">' .
+                            '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>' .
+                            '</button>' .
+                            'Closed period, silahkan buka periode budget ' . $budgetYear . '!</div>');
+                    } else if ($budgetOut > $budgetProduct) {
+                        $this->session->set_flashdata('error', '<div class="alert alert-danger alert-dismissible fade in" role="alert">' .
+                            '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>' .
+                            '</button>' .
+                            'Budget sudah melebihi : ' . rupiah($budgetProduct) . ' /Tahun </div>');
+                    } else if ($instituteOut > $budgetIns) {
+                        $this->session->set_flashdata('error', '<div class="alert alert-danger alert-dismissible fade in" role="alert">' .
+                            '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>' .
+                            '</button>' .
+                            'Budget Instansi sudah melebihi : ' . rupiah($budgetIns) . ' /Tahun </div>');
+                    } else if ($qtyOut > $qtyAvailable) {
+                        $this->session->set_flashdata('error', '<div class="alert alert-danger alert-dismissible fade in" role="alert">' .
+                            '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>' .
+                            '</button>' .
+                            'Quantity yang tersedia sekarang adalah : ' . $qtyAvailable . '</div>');
+                    } else {
+                        $this->session->set_flashdata('error', '<div class="alert alert-danger alert-dismissible fade in" role="alert">' .
+                            '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>' .
+                            '</button>' .
+                            'Error</div>');
+                    }
+                    echo "<script>window.location='" . site_url('requestout/edit/' . $id_barang_out) . "';</script>";
                 }
-                echo "<script>window.location='" . site_url('requestout') . "';</script>";
             } else {
                 $this->session->set_flashdata('msg', '<div class="alert alert-danger alert-dismissible fade in" role="alert">' .
                     '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>' .
                     '</button>' .
-                    'Total Quantity product : ' . $produtDetail->qtyavailable . '</div>');
-
+                    'Silahkan buat budget tahunan terlebih dahulu !</div>');
                 echo "<script>window.location='" . site_url('requestout') . "';</script>";
             }
         }
