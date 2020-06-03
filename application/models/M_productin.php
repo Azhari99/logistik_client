@@ -13,7 +13,8 @@ class M_productin extends CI_Model
 							tbl_barang_masuk.jumlah,
 							tbl_barang_masuk.tgl_barang_masuk,
 							tbl_barang_masuk.keterangan,
-							tbl_barang_masuk.stat');
+							tbl_barang_masuk.stat,
+							tbl_barang_masuk.pathDownload');
 		$this->db->from($this->_table);
 		//$this->db->join('tbl_barang', 'tbl_barang.tbl_barang_id = '.$this->_table.'.tbl_barang_id', 'Left');
 		$query = $this->db->get()->result();

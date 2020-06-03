@@ -23,6 +23,7 @@ class ProductIn extends CI_Controller {
         foreach ($list as $value) {
             $row = array();
             $product = $value->nama_barang;
+            $linkDownload = $value->pathDownload;
             $row[] = $number++;
             $row[] = $value->kode_barang;
             $row[] = $product;
@@ -34,7 +35,7 @@ class ProductIn extends CI_Controller {
             if($value->stat == '1'){
                 $row[] = '<center><span class="label label-success">Completed</span></center>';
                 $row[] = '<center>            
-                            <a class="btn btn-primary btn-xs" title="Edit"><i class="fa fa-edit"></i></a>
+                            <a class="btn btn-primary btn-xs" href="'. $linkDownload .'" title="Download">Download</a>
                         </center>';
             } else {
                 $row[] = '<center><a href="javascript:void(0)" onclick="completeProductIn('."'".$value->id_barang_masuk."'".')" title="Proses"><span class="label label-warning">Drafted</span></a></center>';
