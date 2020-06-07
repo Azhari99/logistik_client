@@ -7,16 +7,27 @@ class M_productin extends CI_Model
 	public function list()
 	{
 		$this->db->select('tbl_barang_masuk.id_barang_masuk,
+							tbl_barang_masuk.documentno,
 							tbl_barang_masuk.kode_barang,
 							tbl_barang_masuk.nama_barang,
 							tbl_barang_masuk.instansi,
 							tbl_barang_masuk.jumlah,
+							tbl_barang_masuk.amount,
 							tbl_barang_masuk.tgl_barang_masuk,
 							tbl_barang_masuk.keterangan,
 							tbl_barang_masuk.stat,
 							tbl_barang_masuk.pathDownload');
 		$this->db->from($this->_table);
 		//$this->db->join('tbl_barang', 'tbl_barang.tbl_barang_id = '.$this->_table.'.tbl_barang_id', 'Left');
+		$query = $this->db->get()->result();
+		return $query;
+	}
+
+	public function listProductOut($date_start, $date_end)
+	{
+		$this->db->select('tbl_barang_masuk.*');
+		$this->db->from($this->_table);
+		$this->db->where('tbl_barang_masuk.tgl_barang_masuk BETWEEN "'.$date_start.'"AND"'.$date_end.'"');
 		$query = $this->db->get()->result();
 		return $query;
 	}

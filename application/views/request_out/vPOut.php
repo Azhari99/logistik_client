@@ -21,6 +21,7 @@
                   <th>Institute</th>
                   <th>Date</th>
                   <th width="10px">Qty</th>
+                  <th>Price</th>
                   <th>Description</th>
                   <th>Status</th>
                   <th></th>

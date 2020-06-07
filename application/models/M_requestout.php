@@ -21,6 +21,7 @@ class M_requestout extends CI_Model
 							tbl_permintaan.datetrx,
 							tbl_permintaan.status,
 							tbl_permintaan.qtyentered,
+							tbl_permintaan.amount,
 							tbl_permintaan.keterangan,
 							tbl_permintaan.created,
 							tbl_permintaan.nama_barang,

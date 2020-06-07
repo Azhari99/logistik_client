@@ -22,13 +22,19 @@ class ProductIn extends CI_Controller {
         $data = array();
         foreach ($list as $value) {
             $row = array();
-            $product = $value->nama_barang;
+            $product = $value->kode_barang.'-'.$value->nama_barang;
             $linkDownload = $value->pathDownload;
             $row[] = $number++;
-            $row[] = $value->kode_barang;
+            $row[] = $value->documentno;
             $row[] = $product;
             $row[] = $value->instansi;
-            $row[] = $value->jumlah;
+            if ($value->nama_barang == "DANA")
+            {
+                $row[] = "-";
+            } else {
+                $row[] = $value->jumlah;
+            }
+            $row[] = $value->amount;
             $row[] = date('d-m-Y',strtotime($value->tgl_barang_masuk));
             $row[] = $value->keterangan;
             

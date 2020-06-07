@@ -16,10 +16,11 @@
               <thead>
                 <tr>
                   <th width="10px">No</th>
-                  <th>Kode Produk</th>
+                  <th>Document No</th>
                   <th>Produk</th>
                   <th>Instansi</th>
                   <th width="10px">Qty</th>
+                  <th>Price</th>
                   <th>Date</th>
                   <th>Description</th>
                   <th>Status</th>

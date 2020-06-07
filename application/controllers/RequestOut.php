@@ -36,7 +36,7 @@ class RequestOut extends CI_Controller
             } else {
                 $row[] = $value->qtyentered;
             }
-
+            $row[] = $value->amount;
             $row[] = $value->keterangan;
 
             if ($value->status == 'P') {
