@@ -63,6 +63,23 @@ class M_requestout extends CI_Model
 		return $result['data'];
 	}
 
+	public function totalBudgetQtyProductOut($id_product, $trxYear, $amount)
+	{
+		$response = $this->_client->request('GET', 'barangkeluar', [
+			'query' => [
+				'key' => 'inv123',
+				'tbl_barang_id' => $id_product,
+				'datetrx' => $trxYear,
+				'status' => 'DR',
+				'amount' => $amount
+			]
+		]);
+
+		$result = json_decode($response->getBody()->getContents(), true);
+
+		return $result['data'];
+	}
+
 	public function listProductApi()
 	{
 		$response = $this->_client->request('GET', 'masterbarang', [
@@ -167,17 +184,26 @@ class M_requestout extends CI_Model
 								FROM tbl_permintaan rk
 								WHERE rk.tbl_barang_id = $id_product
 								AND YEAR(rk.datetrx) = $datetrx
-								AND rk.tbl_barangkeluar_id != $id ");
+								AND rk.tbl_permintaan_id != $id ");
 		}
 		return $sql->row();
 	}
 
-	public function totalInstituteOut($id_institute, $datetrx)
+	public function totalInstituteOut($id_pout, $id_institute, $datetrx)
 	{
-		$sql = $this->db->query("SELECT sum(rk.amount) as amount
+		if($id_pout == null){
+			$sql = $this->db->query("SELECT sum(rk.amount) as amount
 								FROM tbl_permintaan rk
 								WHERE rk.tbl_instansi_id = $id_institute
 								AND YEAR(rk.datetrx) = $datetrx");
+		} else {
+			$sql = $this->db->query("SELECT sum(rk.amount) as amount
+								FROM tbl_permintaan rk
+								WHERE rk.tbl_instansi_id = $id_institute
+								AND YEAR(rk.datetrx) = $datetrx
+								AND rk.tbl_permintaan_id != $id_pout ");
+		}
+		
 		return $sql->row();
 	}
 
