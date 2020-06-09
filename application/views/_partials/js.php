@@ -10,7 +10,7 @@
 <!-- Bootstrap-Growl -->
 <script src="<?php echo base_url('assets/vendors/bootstrap-growl/js/jquery.bootstrap-growl.min.js') ?>"></script>
 <!-- Custom Theme Scripts -->
-<script src="<?php echo base_url('assets/build/js/custom.min.js') ?>"></script>
+<script src="<?php echo base_url('assets/build/js/custom.js') ?>"></script>
 <!-- bootstrap-datepicker -->
 <script src="<?php echo base_url('assets/vendors/bootstrap-datepicker/js/bootstrap-datepicker.min.js') ?>"></script>
 <!-- autoNumeric -->
@@ -65,6 +65,7 @@
 
 		return [day, month, year].join('/');
 	}
+
 	function formatRupiah(angka) {
 		var number_string = angka.toString(),
 			split = number_string.split(','),

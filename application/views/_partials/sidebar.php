@@ -2,35 +2,43 @@
   <div class="menu_section">
     <h3>General</h3>
     <ul class="nav side-menu">
-      <li><a href="<?php echo site_url() ?>"><i class="fa fa-home"></i> Dashboard </a></li>
-      <li><a><i class="fa fa-recycle"></i> Transaction <span class="fa fa-chevron-down"></span></a>
-        <ul class="nav child_menu">
-          <li><a href="<?php echo site_url('productin') ?>">Product In</a></li>
-          <!-- <li><a href="<?php echo site_url('productout') ?>">Product Out</a></li> -->
-        </ul>
-      </li>
-      <li><a><i class="fa fa-list"></i> Request Product <span class="fa fa-chevron-down"></span></a>
-        <ul class="nav child_menu">
-          <!-- <li><a href="<?php echo site_url('requestin') ?>">Request In</a></li> -->
-          <!-- <li><a href="<?php echo site_url('productout') ?>">Request Out</a></li> -->
-          <li><a href="<?php echo site_url('requestout') ?>">Request Out</a></li>
-        </ul>
-      </li>
-      <li><a><i class="fa fa-file"></i> Report <span class="fa fa-chevron-down"></span></a>
-        <ul class="nav child_menu">
-        <li><a href="<?php echo site_url('Rpt_Productin') ?>">Product In</a></li>
-        </ul>
-      </li>
-      <li><a><i class="fa fa-laptop"></i> Master Data <span class="fa fa-chevron-down"></span></a>
-        <ul class="nav child_menu">
-          <li><a href="<?php echo site_url('product') ?>">Product</a></li>
-        </ul>
-      </li>
-      <li><a><i class="fa fa-users"></i> Master Data <span class="fa fa-chevron-down"></span></a>
-        <ul class="nav child_menu">
-          <li><a href="<?php echo site_url('users') ?>">User</a></li>
-        </ul>
-      </li>
+      <?php
+      $level = $this->session->userdata('level');
+      $this->db->from('tbl_menu');
+      $this->db->where('isactive', 'Y');
+
+      if ($level == 2) {
+        $this->db->where_in('tbl_menu_id', [1, 2, 3, 4]);
+      } else if ($level == 3) {
+        $this->db->where_in('tbl_menu_id', [1, 2, 3, 4]);
+      }
+      $this->db->order_by('seqno, name ASC');
+      $main_menu = $this->db->get();
+      foreach ($main_menu->result() as $value) :
+        $menu_id = $value->tbl_menu_id;
+        $this->db->from('tbl_submenu');
+        $this->db->where('tbl_menu_id', $menu_id)
+          ->where('isactive', 'Y');
+        if ($level == 2) {
+          $this->db->where_in('tbl_submenu_id', [3, 4, 5]);
+        } else if ($level == 3) {
+          $this->db->where_in('tbl_submenu_id', [3, 4, 5]);
+        }
+        $this->db->order_by('seqno, name ASC');
+        $sub_menu = $this->db->get();
+        if ($sub_menu->num_rows() > 0) {
+      ?>
+          <li><a><i class="<?= $value->icon ?>"></i> <?= $value->name ?> <span class="fa fa-chevron-down"></span></a>
+        <?php echo "<ul class='nav child_menu'>";
+          foreach ($sub_menu->result() as $row) {
+            echo "<li>" . anchor($row->url, ucfirst($row->name)) . "</li>";
+          }
+          echo "</ul></li>";
+        } else {
+          echo "<li>" . anchor($value->url, '<i class="' . $value->icon . '"></i>' . ucfirst($value->name)) . "</li>";
+        }
+      endforeach;
+        ?>
     </ul>
   </div>
 </div>

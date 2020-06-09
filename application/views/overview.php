@@ -1,3 +1,7 @@
+<?php
+isNotLogin();
+isSession();
+?>
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -47,3 +51,6 @@
 <?php $this->load->view('product/actProduct') ?>
 <?php $this->load->view('product_in/actPIn') ?>
 <?php $this->load->view('request_out/actPOut') ?>
+<?php $this->load->view('menu/actMenu') ?>
+<?php $this->load->view('submenu/actSub') ?>
+<?php $this->load->view('users/actUser') ?>

@@ -25,7 +25,8 @@ class M_requestout extends CI_Model
 							tbl_permintaan.keterangan,
 							tbl_permintaan.created,
 							tbl_permintaan.nama_barang,
-							tbl_permintaan.nama_instansi');
+							tbl_permintaan.nama_instansi,
+							tbl_permintaan.file');
 		$this->db->from($this->_table);
 		//$this->db->join('tbl_barang', 'tbl_barang.tbl_barang_id = '.$this->_table.'.tbl_barang_id', 'Left');
 		//$this->db->join('tbl_instansi', 'tbl_instansi.tbl_instansi_id = '.$this->_table.'.tbl_instansi_id', 'Left');

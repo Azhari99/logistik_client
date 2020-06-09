@@ -137,15 +137,15 @@
 				dataType: 'JSON',
 				success: function(data) {
 					if (data.success) {
-						var success_msg = '<h4><i class="icon fa fa-info"></i> Sukses !</h4> Data berhasil di complete !';
+						var success_msg = '<h4><i class="icon fa fa-info"></i> Sukses !</h4> Data berhasil di proses !';
 						$.bootstrapGrowl(success_msg, {
-							type: 'success',
+							type: 'info',
 							width: 'auto',
 							align: 'center'
 						})
 						reloadProductOut()
 					} else {
-						var error_msg = '<h4><i class="icon fa fa-ban"></i> Gagal !</h4> Data tidak dapat di complete,' + data.error;
+						var error_msg = '<h4><i class="icon fa fa-ban"></i> Gagal !</h4> Data tidak dapat di proses,' + data.error;
 						$.bootstrapGrowl(error_msg, {
 							type: 'danger',
 							width: 'auto',

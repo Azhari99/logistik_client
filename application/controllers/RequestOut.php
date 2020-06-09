@@ -36,21 +36,36 @@ class RequestOut extends CI_Controller
             } else {
                 $row[] = $value->qtyentered;
             }
-            $row[] = $value->amount;
+            $row[] = rupiah($value->amount);
             $row[] = $value->keterangan;
-
-            if ($value->status == 'P') {
-                $row[] = '<center><span class="label label-info">Proses</span></center>';
-                $row[] = '';
-            } else if ($value->status == 'CO') {
-                $row[] = '<center><span class="label label-success">Complete</span></center>';
-                $row[] = '';
+            $row[] = $value->file;
+            
+            $level = $this->session->userdata('level');
+            if ($level == 2) {
+                if ($value->status == 'P') {
+                    $row[] = '<center><span class="label label-info">Proses</span></center>';
+                    $row[] = '';
+                } else if ($value->status == 'CO') {
+                    $row[] = '<center><span class="label label-success">Complete</span></center>';
+                    $row[] = '';
+                } else {
+                    $row[] = '<center><span class="label label-warning">Drafted</span></center>'; 
+                    $row[] = '';
+                }
             } else {
-                $row[] = '<center><a href="javascript:void(0)" onclick="completeProductOut(' . "'" . $value->tbl_permintaan_id . "'" . ')" title="Proses"><span class="label label-warning">Drafted</span></a></center>';
-                $row[] = '<center>            
+                if ($value->status == 'P') {
+                    $row[] = '<center><span class="label label-info">Proses</span></center>';
+                    $row[] = '';
+                } else if ($value->status == 'CO') {
+                    $row[] = '<center><span class="label label-success">Complete</span></center>';
+                    $row[] = '';
+                } else {
+                    $row[] = '<center><a href="javascript:void(0)" onclick="completeProductOut(' . "'" . $value->tbl_permintaan_id . "'" . ')" title="Proses"><span class="label label-warning">Drafted</span></a></center>';
+                    $row[] = '<center>            
                             <a class="btn btn-primary btn-xs" href="requestout/edit/' . $value->tbl_permintaan_id . '" title="Edit"><i class="fa fa-edit"></i></a>
                             <a class="btn btn-danger btn-xs"  onclick="deleteProductOut(' . "'" . $value->tbl_permintaan_id . "'" . ')" title="Delete"><i class="fa fa-trash-o"></i></a>
                         </center>';
+                }
             }
             $data[] = $row;
         }
@@ -136,27 +151,63 @@ class RequestOut extends CI_Controller
                 $budgetYear = $budget_detail[0]['tahun'];
                 $status = $budget_detail[0]['status'];
                 if ($trxYear == $budgetYear && $status == 'O' && $budgetOut <= $budgetProduct && $instituteOut <= $budgetIns && $qtyOut <= $qtyAvailable) {
-                    $param_out = array(
-                        'documentno'        => $code,
-                        'datetrx'           => $datetrx,
-                        'tbl_barang_id'     => $product,
-                        'nama_barang'       => $namaProduct,
-                        'tbl_instansi_id'   => $institute,
-                        'nama_instansi'     => $namaInstansi,
-                        'qtyentered'        => $qty,
-                        'unitprice'         => $unitprice,
-                        'amount'            => $amount,
-                        'status'            => 'DR',
-                        'keterangan'        => $desc
-                    );
-                    $this->m_requestout->save($param_out);
-                    if ($this->db->affected_rows() > 0) {
-                        $this->session->set_flashdata('msg', '<div class="alert alert-success alert-dismissible fade in" role="alert">' .
+                    if ($_FILES['nodin_file_out']['name'] != null) {
+                        if ($this->upload->do_upload('nodin_file_out')) {
+                            $file_name = $this->upload->data('file_name');
+                            $param_out = array(
+                                'documentno'        => $code,
+                                'datetrx'           => $datetrx,
+                                'tbl_barang_id'     => $product,
+                                'nama_barang'       => $namaProduct,
+                                'tbl_instansi_id'   => $institute,
+                                'nama_instansi'     => $namaInstansi,
+                                'qtyentered'        => $qty,
+                                'unitprice'         => $unitprice,
+                                'amount'            => $amount,
+                                'status'            => 'DR',
+                                'keterangan'        => $desc,
+                                'file'              => $file_name,
+                                'createdby'         => $this->session->userdata('userid'),
+                                'updatedby'         => $this->session->userdata('userid')
+                            );
+                            $this->m_requestout->save($param_out);
+                            if ($this->db->affected_rows() > 0) {
+                                $this->session->set_flashdata('msg', '<div class="alert alert-success alert-dismissible fade in" role="alert">' .
+                                    '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>' .
+                                    '</button>' .
+                                    'Data berhasil disimpan</div>');
+                            }
+                            echo "<script>window.location='" . site_url('requestout') . "';</script>";
+                        } else {
+                            $error = $this->upload->display_errors();
+                            $this->session->set_flashdata('error', $error);
+                            echo "<script>window.location='" . site_url('requestout/add') . "';</script>";
+                        }
+                    } else {
+                        $param_out = array(
+                            'documentno'        => $code,
+                            'datetrx'           => $datetrx,
+                            'tbl_barang_id'     => $product,
+                            'nama_barang'       => $namaProduct,
+                            'tbl_instansi_id'   => $institute,
+                            'nama_instansi'     => $namaInstansi,
+                            'qtyentered'        => $qty,
+                            'unitprice'         => $unitprice,
+                            'amount'            => $amount,
+                            'status'            => 'DR',
+                            'keterangan'        => $desc,
+                            'createdby'         => $this->session->userdata('userid'),
+                            'updatedby'         => $this->session->userdata('userid')
+                        );
+                        $this->m_requestout->save($param_out);
+                        if ($this->db->affected_rows() > 0) {
+                            $this->session->set_flashdata('msg', '<div class="alert alert-success alert-dismissible fade in" role="alert">' .
                             '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>' .
                             '</button>' .
-                            'Data berhasil disimpan</div>');
+                                'Data berhasil disimpan</div>');
+                        }
+                        echo "<script>window.location='" . site_url('requestout') . "';</script>";
                     }
-                    echo "<script>window.location='" . site_url('requestout') . "';</script>";
                 } else {
                     if ($status == 'C') {
                         $this->session->set_flashdata('error', '<div class="alert alert-danger alert-dismissible fade in" role="alert">' .
@@ -277,29 +328,70 @@ class RequestOut extends CI_Controller
                 $budgetYear = $budget_detail[0]['tahun'];
                 $status = $budget_detail[0]['status'];
                 if ($trxYear == $budgetYear && $status == 'O' && $budgetOut <= $budgetProduct && $instituteOut <= $budgetIns && $qtyOut <= $qtyAvailable) {
-                    $param_out = array(
-                        'documentno'        => $code,
-                        'datetrx'           => $datetrx,
-                        'tbl_barang_id'     => $product,
-                        'nama_barang'       => $namaProduct,
-                        'tbl_instansi_id'   => $institute,
-                        'nama_instansi'     => $namaInstansi,
-                        'qtyentered'        => $qty,
-                        'unitprice'         => $unitprice,
-                        'amount'            => $amount,
-                        'status'            => 'DR',
-                        'keterangan'        => $desc,
-                        'updated'           => date('Y-m-d H:i:s')
-                    );
-                    $where_out = array('tbl_permintaan_id' => $id_barang_out);
-                    $this->m_requestout->update($param_out, $where_out);
-                    if ($this->db->affected_rows() > 0) {
-                        $this->session->set_flashdata('msg', '<div class="alert alert-success alert-dismissible fade in" role="alert">' .
+                    if ($_FILES['nodin_file_out']['name'] != null) {
+                        if ($this->upload->do_upload('nodin_file_out')) {
+                            $item = $this->m_requestout->detail($id_barang_out)->row();
+                            if ($item->file != null) {
+                                $target = './upload/nodin/' . $item->file;
+                                unlink($target); //replace data lama
+                            }
+                            $file_name = $this->upload->data('file_name');
+                            $param_out = array(
+                                'documentno'        => $code,
+                                'datetrx'           => $datetrx,
+                                'tbl_barang_id'     => $product,
+                                'nama_barang'       => $namaProduct,
+                                'tbl_instansi_id'   => $institute,
+                                'nama_instansi'     => $namaInstansi,
+                                'qtyentered'        => $qty,
+                                'unitprice'         => $unitprice,
+                                'amount'            => $amount,
+                                'status'            => 'DR',
+                                'keterangan'        => $desc,
+                                'file'              => $file_name,
+                                'updatedby'         => $this->session->userdata('userid'),
+                                'updated'           => date('Y-m-d H:i:s')
+                            );
+                            $where_out = array('tbl_permintaan_id' => $id_barang_out);
+                            $this->m_requestout->update($param_out, $where_out);
+                            if ($this->db->affected_rows() > 0) {
+                                $this->session->set_flashdata('msg', '<div class="alert alert-success alert-dismissible fade in" role="alert">' .
+                                    '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>' .
+                                    '</button>' .
+                                    'Data berhasil diubah</div>');
+                            }
+                            echo "<script>window.location='" . site_url('requestout') . "';</script>";
+                        } else {
+                            $error = $this->upload->display_errors();
+                            $this->session->set_flashdata('error', $error);
+                            echo "<script>window.location='" . site_url('requestout/edit/' . $id_barang_out) . "'</script>";
+                        }
+                    } else {
+                        $param_out = array(
+                            'documentno'        => $code,
+                            'datetrx'           => $datetrx,
+                            'tbl_barang_id'     => $product,
+                            'nama_barang'       => $namaProduct,
+                            'tbl_instansi_id'   => $institute,
+                            'nama_instansi'     => $namaInstansi,
+                            'qtyentered'        => $qty,
+                            'unitprice'         => $unitprice,
+                            'amount'            => $amount,
+                            'status'            => 'DR',
+                            'keterangan'        => $desc,
+                            'updatedby'         => $this->session->userdata('userid'),
+                            'updated'           => date('Y-m-d H:i:s')
+                        );
+                        $where_out = array('tbl_permintaan_id' => $id_barang_out);
+                        $this->m_requestout->update($param_out, $where_out);
+                        if ($this->db->affected_rows() > 0) {
+                            $this->session->set_flashdata('msg', '<div class="alert alert-success alert-dismissible fade in" role="alert">' .
                             '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>' .
                             '</button>' .
-                            'Data berhasil diubah</div>');
+                                'Data berhasil diubah</div>');
+                        }
+                        echo "<script>window.location='" . site_url('requestout') . "';</script>";
                     }
-                    echo "<script>window.location='" . site_url('requestout') . "';</script>";
                 } else {
                     if ($status == 'C') {
                         $this->session->set_flashdata('error', '<div class="alert alert-danger alert-dismissible fade in" role="alert">' .
@@ -354,7 +446,8 @@ class RequestOut extends CI_Controller
         $amount = $get_detail->amount;
 
         $param_permintaan = array(
-            'status' => 'P'
+            'status' => 'P',
+            'updatedby' => $this->session->userdata('userid')
         );
 
         $dataApi = array(
@@ -381,6 +474,11 @@ class RequestOut extends CI_Controller
 
     public function delete($id)
     {
+        $item = $this->m_requestout->detail($id)->row();
+        if ($item->file != null) {
+            $target = './upload/nodin/' . $item->file;
+            unlink($target); //replace data lama
+        }
         $data = $this->m_requestout->delete($id);
         echo json_encode($data);
     }

@@ -7,11 +7,11 @@
         <div class="x_panel">
           <div class="x_title">
             <h2>Product In</h2>
-            <!-- <a class="navbar-right"><a href="<?php echo site_url('productin/add') ?>" class="btn btn-primary">New Product In</a></p> -->
+            <p class="navbar-right"><a class="btn btn-primary" onclick="reloadProductIn()"><i class="fa fa-refresh"> Refresh</i></a></p>
             <div class="clearfix"></div>
           </div>
           <div class="x_content">
-            <?php echo $this->session->flashdata('msg');?>
+            <?php echo $this->session->flashdata('msg'); ?>
             <table id="table-product-in" class="table table-hover table-bordered" style="width: 100%">
               <thead>
                 <tr>

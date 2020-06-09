@@ -23,6 +23,7 @@
                   <th width="10px">Qty</th>
                   <th>Price</th>
                   <th>Description</th>
+                  <th>File</th>
                   <th>Status</th>
                   <th></th>
                 </tr>

@@ -7,7 +7,7 @@
         <div class="x_panel">
           <div class="x_title">
             <h2><?php echo ucfirst($this->uri->segment(1)) ?></h2>
-            <p class="navbar-right"><a href="<?php echo site_url('product/add') ?>" class="btn btn-primary">New Product</a></p>
+            <!-- <p class="navbar-right"><a href="<?php echo site_url('product/add') ?>" class="btn btn-primary">New Product</a></p> -->
             <div class="clearfix"></div>
           </div>
           <div class="x_content">

@@ -18,3 +18,31 @@
 <link href="<?php echo base_url('assets/build/css/custom.min.css') ?>" rel="stylesheet">
 <!-- Bootstrap Datepicker -->
 <link href="<?php echo base_url('assets/vendors/bootstrap-datepicker/css/bootstrap-datepicker.min.css') ?>" rel="stylesheet">
+
+<style>
+    .icondash {
+        width: 20px;
+        height: 20px;
+        color: #BAB8B8;
+        position: absolute;
+        right: 33px;
+        top: 10px;
+        margin: 0;
+        font-size: 50px;
+        line-height: 0;
+        vertical-align: bottom;
+        padding: 0;
+        z-index: 1
+    }
+
+    .total {
+        font-size: medium;
+        font-weight: bold;
+        line-height: 3.99999;
+        position: relative;
+        margin: 0;
+        margin-left: 10px;
+        z-index: 5;
+        padding: 0
+    }
+</style>

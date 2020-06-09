@@ -34,15 +34,20 @@ class ProductIn extends CI_Controller {
             } else {
                 $row[] = $value->jumlah;
             }
-            $row[] = $value->amount;
+            $row[] = rupiah($value->amount);
             $row[] = date('d-m-Y',strtotime($value->tgl_barang_masuk));
             $row[] = $value->keterangan;
             
             if($value->stat == '1'){
                 $row[] = '<center><span class="label label-success">Completed</span></center>';
-                $row[] = '<center>            
-                            <a class="btn btn-primary btn-xs" href="'. $linkDownload .'" title="Download">Download</a>
+                if (!empty($linkDownload)) {
+                    $row[] = '<center>            
+                            <a class="btn btn-primary btn-xs" href="' . $linkDownload . '" title="Download"><i class="fa fa-download"></i></a>
                         </center>';
+                } else {
+                    $row[] = '';
+                }
+                
             } else {
                 $row[] = '<center><a href="javascript:void(0)" onclick="completeProductIn('."'".$value->id_barang_masuk."'".')" title="Proses"><span class="label label-warning">Drafted</span></a></center>';
                 $row[] = '<center>            
@@ -54,10 +59,5 @@ class ProductIn extends CI_Controller {
         }
         $result = array('data' => $data );
         echo json_encode($result);
-    }
-
-    public function rupiah($angka)  {
-        $hasil_rupiah = "Rp " . number_format($angka,2,',','.');
-        return $hasil_rupiah;
     }
 }
