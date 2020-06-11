@@ -120,11 +120,12 @@ class RequestOut extends CI_Controller
         $namaInstansi = $instansiDetail[0]['name'];
         $budgetProduct = $produtDetail[0]['budget'];
         $budget_detail = $this->m_requestout->getBudgetApi($type_id, $trxYear);
-        $sumBudgetOut = $this->m_requestout->totalBudgetQtyProductOut($product, $trxYear, 'amount');
-        $sumQtyOut = $this->m_requestout->totalBudgetQtyProductOut($product, $trxYear, null);
+        $sumBudgetOut = $this->m_requestout->totalBudgetProductOut($product, $trxYear, 'amount');
+        $sumBudgetInsOut = $this->m_requestout->totalBudgetInstituteProductOut($institute, $trxYear, 'amount');
+        $sumQtyOut = $this->m_requestout->totalQtyProductOut($product, $trxYear, null);
         $sumRequestOut = $this->m_requestout->totalRequestOut(null, $product, $trxYear);
         $totalInstituteOut = $this->m_requestout->totalInstituteOut(null, $institute, $trxYear);
-        $sumInstituteOut = $sumBudgetOut[0]['amount'] + $totalInstituteOut->amount;
+        $sumInstituteOut = $sumBudgetInsOut[0]['amount'] + $totalInstituteOut->amount;
 
         if ($type_id == 2) {
             $qtyOut = $qty = $unitprice = 0;
@@ -299,10 +300,11 @@ class RequestOut extends CI_Controller
         $budgetProduct = $produtDetail[0]['budget'];
         $budget_detail = $this->m_requestout->getBudgetApi($type_id, $trxYear);
         $sumBudgetOut = $this->m_requestout->totalBudgetQtyProductOut($product, $trxYear, 'amount');
+        $sumBudgetInsOut = $this->m_requestout->totalBudgetInstituteProductOut($institute, $trxYear, 'amount');
         $sumQtyOut = $this->m_requestout->totalBudgetQtyProductOut($product, $trxYear, null);
         $sumRequestOut = $this->m_requestout->totalRequestOut(null, $product, $trxYear);
         $totalInstituteOut = $this->m_requestout->totalInstituteOut($id_barang_out, $institute, $trxYear);
-        $sumInstituteOut = $sumBudgetOut[0]['amount'] + $totalInstituteOut->amount;
+        $sumInstituteOut = $sumBudgetInsOut[0]['amount'] + $totalInstituteOut->amount;
 
         if ($type_id == 2) {
             $qtyOut = $qty = $unitprice = 0;

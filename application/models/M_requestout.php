@@ -65,7 +65,7 @@ class M_requestout extends CI_Model
 		return $result['data'];
 	}
 
-	public function totalBudgetQtyProductOut($id_product, $trxYear, $amount)
+	public function totalBudgetProductOut($id_product, $trxYear, $amount)
 	{
 		$response = $this->_client->request('GET', 'barangkeluar', [
 			'query' => [
@@ -73,6 +73,40 @@ class M_requestout extends CI_Model
 				'tbl_barang_id' => $id_product,
 				'datetrx' => $trxYear,
 				'status' => 'CO',
+				'amount' => $amount
+			]
+		]);
+
+		$result = json_decode($response->getBody()->getContents(), true);
+
+		return $result['data'];
+	}
+
+	public function totalBudgetInstituteProductOut($institute, $trxYear, $amount)
+	{
+		$response = $this->_client->request('GET', 'barangkeluar', [
+			'query' => [
+				'key' => 'inv123',
+				'tbl_instansi_id' => $institute,
+				'datetrx' => $trxYear,
+				//'status' => 'CO',
+				'amount' => $amount
+			]
+		]);
+
+		$result = json_decode($response->getBody()->getContents(), true);
+
+		return $result['data'];
+	}
+
+	public function totalQtyProductOut($id_product, $trxYear, $amount)
+	{
+		$response = $this->_client->request('GET', 'barangkeluar', [
+			'query' => [
+				'key' => 'inv123',
+				'tbl_barang_id' => $id_product,
+				'datetrx' => $trxYear,
+				'status' => 'DR',
 				'amount' => $amount
 			]
 		]);
