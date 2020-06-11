@@ -28,7 +28,7 @@ class ProductIn extends CI_Controller {
             $row[] = $value->documentno;
             $row[] = $product;
             $row[] = $value->instansi;
-            if ($value->nama_barang == "DANA")
+            if ($value->jumlah == 0)
             {
                 $row[] = "-";
             } else {

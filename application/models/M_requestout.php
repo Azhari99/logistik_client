@@ -72,7 +72,7 @@ class M_requestout extends CI_Model
 				'key' => 'inv123',
 				'tbl_barang_id' => $id_product,
 				'datetrx' => $trxYear,
-				'status' => 'DR',
+				'status' => 'CO',
 				'amount' => $amount
 			]
 		]);

@@ -31,7 +31,7 @@ class RequestOut extends CI_Controller
             $row[] = $product;
             $row[] = $institute;
             $row[] = date('d-m-Y', strtotime($value->datetrx));
-            if ($value->nama_barang == "DANA") {
+            if ($value->qtyentered == 0) {
                 $row[] = "-";
             } else {
                 $row[] = $value->qtyentered;
