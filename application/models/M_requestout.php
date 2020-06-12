@@ -213,12 +213,14 @@ class M_requestout extends CI_Model
 								sum(rk.qtyentered) as qtyentered
 								FROM tbl_permintaan rk
 								WHERE rk.tbl_barang_id = $id_product
+								AND status = 'DR'
 								AND YEAR(rk.datetrx) = $datetrx");
 		} else {
 			$sql = $this->db->query("SELECT sum(rk.amount) as amount,
 								sum(rk.qtyentered) as qtyentered
 								FROM tbl_permintaan rk
 								WHERE rk.tbl_barang_id = $id_product
+								AND status = 'DR'
 								AND YEAR(rk.datetrx) = $datetrx
 								AND rk.tbl_permintaan_id != $id ");
 		}
