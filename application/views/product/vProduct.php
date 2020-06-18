@@ -19,6 +19,7 @@
                   <th>Code Product</th>
                   <th>Name</th>
                   <th>Qty</th>
+                  <th>Budget</th>
                   <th>Status</th>
                 </tr>
               </thead>

@@ -38,7 +38,7 @@ function isSession()
     $uri_2 = $ci->uri->segment('2');
     $sub = array("add", "edit", "actAdd", "actEdit");
     if ($user_level == 2) {
-        $menu_1 = array(null, "web", "productin", "requestout", "rpt_budgetin", "product");
+        $menu_1 = array(null, "web", "productin", "requestout", "rpt_productin", "product");
         if (in_array($uri_1, $menu_1) && in_array($uri_2, $sub)) {
             $params = array('userid', 'username', 'name', 'level');
             $ci->session->unset_userdata($params);
@@ -53,7 +53,7 @@ function isSession()
             redirect('auth');
         }
     } else if ($user_level == 3) {
-        $menu_2 = array(null, "web", "productin", "requestout", "rpt_budgetin" . "product");
+        $menu_2 = array(null, "web", "productin", "requestout", "rpt_productin");
         if (!in_array($uri_1, $menu_2) && in_array($uri_2, $sub)) {
             $params = array('userid', 'username', 'name', 'level');
             $ci->session->unset_userdata($params);

@@ -8,7 +8,7 @@
       $this->db->where('isactive', 'Y');
 
       if ($level == 2) {
-        $this->db->where_in('tbl_menu_id', [1, 2, 3, 4]);
+        $this->db->where_in('tbl_menu_id', [1, 2, 3, 4, 5]);
       } else if ($level == 3) {
         $this->db->where_in('tbl_menu_id', [1, 2, 3, 4]);
       }
@@ -20,7 +20,7 @@
         $this->db->where('tbl_menu_id', $menu_id)
           ->where('isactive', 'Y');
         if ($level == 2) {
-          $this->db->where_in('tbl_submenu_id', [3, 4, 5]);
+          $this->db->where_in('tbl_submenu_id', [3, 4, 5, 6]);
         } else if ($level == 3) {
           $this->db->where_in('tbl_submenu_id', [3, 4, 5]);
         }

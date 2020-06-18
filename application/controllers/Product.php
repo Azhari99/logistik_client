@@ -23,8 +23,12 @@ class Product extends CI_Controller {
             $row[] = $number++;
             $row[] = $value->kode_barang;
             $row[] = $value->nama_barang;
-            $row[] = $value->jumlah;
-            
+            if ($value->nama_barang == "DANA") {
+                $row[] = "-";    
+            } else {
+                $row[] = $value->jumlah;
+            }
+            $row[] = rupiah($value->budget);
             if($value->stat == '1'){
                 $row[] = '<center><span class="label label-success">Completed</span></center>';
             } else {
