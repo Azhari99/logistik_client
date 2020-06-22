@@ -446,6 +446,8 @@ class RequestOut extends CI_Controller
         $keterangan = $get_detail->keterangan;
         $unitprice = $get_detail->unitprice;
         $amount = $get_detail->amount;
+        $file_name = $get_detail->file;
+        $pathDownload = base_url('/requestout/download/'). $file_name;
 
         $param_permintaan = array(
             'status' => 'P',
@@ -462,6 +464,7 @@ class RequestOut extends CI_Controller
             'status' => 'DR',
             'qtyentered' => $qty_out,
             'keterangan' => $keterangan,
+            'pathDownload' => $pathDownload,
             'key' => "inv123"
         );
 
@@ -472,6 +475,12 @@ class RequestOut extends CI_Controller
         $data = array('success' => 'berhasil');
 
         echo json_encode($data);
+    }
+
+    public function download($file_name)
+    {
+        $url = 'upload/nodin/' . $file_name . '';
+        force_download($url, NULL);
     }
 
     public function delete($id)

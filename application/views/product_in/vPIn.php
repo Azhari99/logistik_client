@@ -24,7 +24,7 @@
                   <th>Date</th>
                   <th>Description</th>
                   <th>Status</th>
-                  <th></th>
+                  <th>File</th>
                 </tr>
               </thead>
             </table>
