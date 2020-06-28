@@ -54,3 +54,4 @@ isSession();
 <?php $this->load->view('menu/actMenu') ?>
 <?php $this->load->view('submenu/actSub') ?>
 <?php $this->load->view('users/actUser') ?>
+<?php $this->load->view('report/actReport') ?>

@@ -9,11 +9,15 @@ class Rpt_Productin extends CI_Controller
         parent::__construct();
         $this->load->library('BOPDF');
         $this->load->model('m_productin');
+        $this->load->model('m_product');
     }
 
     public function index()
     {
-        $this->template->load('overview', 'report/vReport_Productin');
+        $data['product'] = $this->m_product->listProduct();
+        $data['category'] = $this->m_product->getCategoryByIdAPI();
+        $data['type'] = $this->m_product->getTypeByIdAPI();
+        $this->template->load('overview', 'report/vReport_Productin', $data);
     }
 
     public function proses()
@@ -28,11 +32,11 @@ class Rpt_Productin extends CI_Controller
 
     public function report($setPost, $oriDateStart, $oriDateEnd, $date_start, $date_end)
     {
-        // $options = $setPost['inlineRadioOptions'];
-        // $id_product = $setPost['listproduct'];
-        // $id_institute = $setPost['listinstitute'];
-        // $id_category = $setPost['listcategory'];
-        // $id_type = $setPost['listtype'];
+        $options = $setPost['inlineRadioOptions'];
+        $kode_barang = $setPost['listproduct'];
+        $id_institute = $setPost['listinstitute'];
+        $id_category = $setPost['listcategory'];
+        $id_type = $setPost['listtype'];
         $data_head = "";
         $result = "";
         $budget = "";
@@ -40,11 +44,19 @@ class Rpt_Productin extends CI_Controller
         $jumlah = 0;       
         
         
-            
+        if ($options == "product"){
+            $result = $this->m_productin->listProductOut($options, $kode_barang, $date_start, $date_end);
+        }
+        else if ($options == "category"){
+            $result = $this->m_productin->listProductOut($options, $id_category, $date_start, $date_end);
+        }
+        else {
+            $result = $this->m_productin->listProductOut($options, $id_type, $date_start, $date_end);
+        }
                 // $detail_product = $this->m_product->detail($id_product)->row();
                 // $data_head = $detail_product->value . "-" . $detail_product->name;
             
-        $result = $this->m_productin->listProductOut($date_start, $date_end);
+        //$result = $this->m_productin->listProductOut($options, $kode_barang, $date_start, $date_end);
 
         
 

@@ -15,8 +15,8 @@
                 <div class="form-check form-check-inline col-md-6 col-md-offset-3">
                   <input class="form-check-input inlineRadioOptions" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="product" required>
                   <label class="form-check-label" for="inlineRadio1">By Product</label>
-                  <input class="form-check-input inlineRadioOptions" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="institute" required>
-                  <label class="form-check-label" for="inlineRadio2">By Institute</label>
+                  <!-- <input class="form-check-input inlineRadioOptions" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="institute" required>
+                  <label class="form-check-label" for="inlineRadio2">By Institute</label> -->
                   <input class="form-check-input inlineRadioOptions" type="radio" name="inlineRadioOptions" id="inlineRadio3" value="category" required>
                   <label class="form-check-label" for="inlineRadio3">By Category</label>
                   <input class="form-check-input inlineRadioOptions" type="radio" name="inlineRadioOptions" id="inlineRadio4" value="type" required>
@@ -30,7 +30,7 @@
                   <select class="form-control select2" name="listproduct" style="width: 100%">
                     <option value="">-- Choose Product --</option>
                     <?php foreach ($product as $value) : ?>
-                      <option value="<?= $value->tbl_barang_id ?>"><?= $value->name ?></option>
+                      <option value="<?= $value->kode_barang ?>"><?= $value->nama_barang ?></option>
                     <?php endforeach; ?>
                   </select>
                 </div>
@@ -54,7 +54,7 @@
                   <select class="form-control select2" name="listcategory" style="width: 100%">
                     <option value="">-- Choose Category --</option>
                     <?php foreach ($category as $value) : ?>
-                      <option value="<?= $value->tbl_kategori_id ?>"><?= $value->name ?></option>
+                      <option value="<?= $value['tbl_kategori_id'] ?>"><?= $value['name'] ?></option>
                     <?php endforeach; ?>
                   </select>
                 </div>
@@ -66,7 +66,7 @@
                   <select class="form-control select2" name="listtype" style="width: 100%">
                     <option value="">-- Choose Type --</option>
                     <?php foreach ($type as $value) : ?>
-                      <option value="<?= $value->tbl_jenis_id ?>"><?= $value->name ?></option>
+                      <option value="<?= $value['tbl_jenis_id'] ?>"><?= $value['name'] ?></option>
                     <?php endforeach; ?>
                   </select>
                 </div>

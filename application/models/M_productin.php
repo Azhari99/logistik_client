@@ -23,11 +23,14 @@ class M_productin extends CI_Model
 		return $query;
 	}
 
-	public function listProductOut($date_start, $date_end)
+	public function listProductOut($options, $id, $date_start, $date_end)
 	{
 		$this->db->select('tbl_barang_masuk.*');
 		$this->db->from($this->_table);
 		$this->db->where('tbl_barang_masuk.tgl_barang_masuk BETWEEN "'.$date_start.'"AND"'.$date_end.'"');
+		if ($options == "product" && !empty($id)){
+			$this->db->where('kode_barang', $id);
+		}
 		$query = $this->db->get()->result();
 		return $query;
 	}
