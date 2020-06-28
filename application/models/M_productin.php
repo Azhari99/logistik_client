@@ -92,4 +92,12 @@ class M_productin extends CI_Model
 		$query = $this->db->count_all_results();
 		return $query;
 	}
+
+	public function budgetProductIn($year)
+	{
+		$this->db->select_sum('amount');
+		$this->db->from($this->_table);
+		$this->db->where('DATE_FORMAT(tgl_barang_masuk, "%Y") =', $year);
+		return $this->db->get()->row();
+	}
 }

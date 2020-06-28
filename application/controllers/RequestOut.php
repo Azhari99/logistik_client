@@ -9,7 +9,6 @@ class RequestOut extends CI_Controller
         parent::__construct();
         $this->load->model('m_requestout');
         $this->load->model('m_product');
-        //$this->load->model('m_institute');
     }
 
     public function index()
@@ -38,7 +37,13 @@ class RequestOut extends CI_Controller
             }
             $row[] = rupiah($value->amount);
             $row[] = $value->keterangan;
-            $row[] = $value->file;
+            if (!empty($value->file)) {
+                $row[] = '<center>
+                    <a class="btn btn-primary btn-xs" href="upload/nodin/' . $value->file . '" target="_blank"><i class="fa fa-download"></i></a>
+                    </center>';
+            } else {
+                $row[] = '';
+            }
             
             $level = $this->session->userdata('level');
             if ($level == 2) {

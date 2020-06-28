@@ -257,10 +257,10 @@ class M_requestout extends CI_Model
 		return $this->db->get()->row();
 	}
 
-	public function totalProductOut()
+	public function countRequestOut()
 	{
 		$this->db->from($this->_table);
-		$query = $this->db->count_all_results();
-		return $query;
+		$this->db->where_not_in('status', 'CO');
+		return $this->db->count_all_results();
 	}
 }

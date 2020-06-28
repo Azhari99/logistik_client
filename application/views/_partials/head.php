@@ -20,6 +20,7 @@
 <link href="<?php echo base_url('assets/vendors/bootstrap-datepicker/css/bootstrap-datepicker.min.css') ?>" rel="stylesheet">
 
 <style>
+    /* icon dashboard */
     .icondash {
         width: 20px;
         height: 20px;
@@ -35,6 +36,7 @@
         z-index: 1
     }
 
+    /* setting font total dashboard */
     .total {
         font-size: medium;
         font-weight: bold;

@@ -17,8 +17,8 @@
                 <tr>
                   <th width="10px">No</th>
                   <th>Document No</th>
-                  <th>Produk</th>
-                  <th>Instansi</th>
+                  <th>Product</th>
+                  <th>Institute</th>
                   <th width="10px">Qty</th>
                   <th>Price</th>
                   <th>Date</th>
