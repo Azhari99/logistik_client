@@ -53,8 +53,8 @@ class Rpt_Productin extends CI_Controller
         else {
             $result = $this->m_productin->listProductOut($options, $id_type, $date_start, $date_end);
         }
-                // $detail_product = $this->m_product->detail($id_product)->row();
-                // $data_head = $detail_product->value . "-" . $detail_product->name;
+        // $detail_product = $this->m_product->detail($id_product)->row();
+        // $data_head = $detail_product->value . "-" . $detail_product->name;
             
         //$result = $this->m_productin->listProductOut($options, $kode_barang, $date_start, $date_end);
 

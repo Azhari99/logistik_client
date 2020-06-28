@@ -234,7 +234,7 @@ class RequestOut extends CI_Controller
                         $this->session->set_flashdata('error', '<div class="alert alert-danger alert-dismissible fade in" role="alert">' .
                             '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>' .
                             '</button>' .
-                            'Quantity yang tersedia sekarang adalah : ' . $qtyAvailable . '</div>');
+                            'Quantity yang tersedia sekarang adalah : ' . $qtyAvailable - $sumRequestOut . '</div>');
                     } else {
                         $this->session->set_flashdata('error', '<div class="alert alert-danger alert-dismissible fade in" role="alert">' .
                             '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>' .
@@ -419,7 +419,7 @@ class RequestOut extends CI_Controller
                         $this->session->set_flashdata('error', '<div class="alert alert-danger alert-dismissible fade in" role="alert">' .
                             '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>' .
                             '</button>' .
-                            'Quantity yang tersedia sekarang adalah : ' . $qtyAvailable . '</div>');
+                            'Quantity yang tersedia sekarang adalah : ' . $qtyAvailable - $sumRequestOut . '</div>');
                     } else {
                         $this->session->set_flashdata('error', '<div class="alert alert-danger alert-dismissible fade in" role="alert">' .
                             '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>' .

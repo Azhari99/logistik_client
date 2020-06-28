@@ -30,6 +30,12 @@ class M_productin extends CI_Model
 		$this->db->where('tbl_barang_masuk.tgl_barang_masuk BETWEEN "'.$date_start.'"AND"'.$date_end.'"');
 		if ($options == "product" && !empty($id)){
 			$this->db->where('kode_barang', $id);
+		} else if ($options == "category" && !empty($id)){
+			$this->db->where('kategori_id', $id);
+		} else {
+			if (!empty($id)){
+				$this->db->where('jenis_id', $id);
+			}
 		}
 		$query = $this->db->get()->result();
 		return $query;
