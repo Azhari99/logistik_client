@@ -136,7 +136,7 @@ class RequestOut extends CI_Controller
             $qtyOut = $qty = $unitprice = 0;
             $amount = $budget;
             $instituteOut = $budget + $sumInstituteOut;
-            $budgetOut = $budget + $sumBudgetOut[0]['amount'];
+            $budgetOut = $budget + $sumRequestOut->amount + $sumBudgetOut[0]['amount'];
         } else {
             $qtyOut = $qty + $sumRequestOut->qtyentered + $sumQtyOut[0]['qtyentered'];
             $amount = $total;
@@ -304,9 +304,9 @@ class RequestOut extends CI_Controller
         $namaInstansi = $instansiDetail[0]['name'];
         $budgetProduct = $produtDetail[0]['budget'];
         $budget_detail = $this->m_requestout->getBudgetApi($type_id, $trxYear);
-        $sumBudgetOut = $this->m_requestout->totalBudgetQtyProductOut($product, $trxYear, 'amount');
+        $sumBudgetOut = $this->m_requestout->totalBudgetProductOut($product, $trxYear, 'amount');
         $sumBudgetInsOut = $this->m_requestout->totalBudgetInstituteProductOut($institute, $trxYear, 'amount');
-        $sumQtyOut = $this->m_requestout->totalBudgetQtyProductOut($product, $trxYear, null);
+        $sumQtyOut = $this->m_requestout->totalQtyProductOut($product, $trxYear, null);
         $sumRequestOut = $this->m_requestout->totalRequestOut($id_barang_out, $product, $trxYear);
         $totalInstituteOut = $this->m_requestout->totalInstituteOut($id_barang_out, $institute, $trxYear);
         $sumInstituteOut = $sumBudgetInsOut[0]['amount'] + $totalInstituteOut->amount;
@@ -315,7 +315,7 @@ class RequestOut extends CI_Controller
             $qtyOut = $qty = $unitprice = 0;
             $amount = $budget;
             $instituteOut = $budget + $sumInstituteOut;
-            $budgetOut = $budget + $sumBudgetOut[0]['amount'];
+            $budgetOut = $budget + $sumRequestOut->amount + $sumBudgetOut[0]['amount'];
         } else {
             $qtyOut = $qtyOut = $qty + $sumRequestOut->qtyentered + $sumQtyOut[0]['qtyentered'];
             $amount = $total;
