@@ -123,6 +123,7 @@ class RequestOut extends CI_Controller
         $type_id = $produtDetail[0]['jenis_id'];
         $namaProduct = $produtDetail[0]['name'];
         $namaInstansi = $instansiDetail[0]['name'];
+        $budgetAvailable = $produtDetail[0]['budgetAnggaranAvailable'];
         $budgetProduct = $produtDetail[0]['budget'];
         $budget_detail = $this->m_requestout->getBudgetApi($type_id, $trxYear);
         $sumBudgetOut = $this->m_requestout->totalBudgetProductOut($product, $trxYear, 'amount');
@@ -143,7 +144,8 @@ class RequestOut extends CI_Controller
             $instituteOut = $total + $sumInstituteOut;
             $budgetOut = $total;
         }
-
+        // var_dump($qty, $sumRequestOut->qtyentered, $sumQtyOut[0]['qtyentered'] );
+        // die();
         $budgetIns = $instansiDetail[0]['budget'];
 
         if ($this->form_validation->run() == FALSE) {
@@ -156,7 +158,7 @@ class RequestOut extends CI_Controller
             if ($budget_detail != null) {
                 $budgetYear = $budget_detail[0]['tahun'];
                 $status = $budget_detail[0]['status'];
-                if ($trxYear == $budgetYear && $status == 'O' && $budgetOut <= $budgetProduct && $instituteOut <= $budgetIns && $qtyOut <= $qtyAvailable) {
+                if ($trxYear == $budgetYear && $status == 'O' && $budgetOut <= $budgetAvailable && $instituteOut <= $budgetIns && $qtyOut <= $qtyAvailable) {
                     if ($_FILES['nodin_file_out']['name'] != null) {
                         if ($this->upload->do_upload('nodin_file_out')) {
                             $file_name = $this->upload->data('file_name');
@@ -220,7 +222,7 @@ class RequestOut extends CI_Controller
                             '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>' .
                             '</button>' .
                             'Closed period, silahkan buka periode budget ' . $budgetYear . '!</div>');
-                    } else if ($budgetOut > $budgetProduct) {
+                    } else if ($budgetOut > $budgetAvailable) {
                         $this->session->set_flashdata('error', '<div class="alert alert-danger alert-dismissible fade in" role="alert">' .
                             '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>' .
                             '</button>' .
@@ -302,6 +304,7 @@ class RequestOut extends CI_Controller
         $type_id = $produtDetail[0]['jenis_id'];
         $namaProduct = $produtDetail[0]['name'];
         $namaInstansi = $instansiDetail[0]['name'];
+        $budgetAvailable = $produtDetail[0]['budgetAnggaranAvailable'];
         $budgetProduct = $produtDetail[0]['budget'];
         $budget_detail = $this->m_requestout->getBudgetApi($type_id, $trxYear);
         $sumBudgetOut = $this->m_requestout->totalBudgetProductOut($product, $trxYear, 'amount');
@@ -334,7 +337,7 @@ class RequestOut extends CI_Controller
             if ($budget_detail != null) {
                 $budgetYear = $budget_detail[0]['tahun'];
                 $status = $budget_detail[0]['status'];
-                if ($trxYear == $budgetYear && $status == 'O' && $budgetOut <= $budgetProduct && $instituteOut <= $budgetIns && $qtyOut <= $qtyAvailable) {
+                if ($trxYear == $budgetYear && $status == 'O' && $budgetOut <= $budgetAvailable && $instituteOut <= $budgetIns && $qtyOut <= $qtyAvailable) {
                     if ($_FILES['nodin_file_out']['name'] != null) {
                         if ($this->upload->do_upload('nodin_file_out')) {
                             $item = $this->m_requestout->detail($id_barang_out)->row();
@@ -405,7 +408,7 @@ class RequestOut extends CI_Controller
                             '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>' .
                             '</button>' .
                             'Closed period, silahkan buka periode budget ' . $budgetYear . '!</div>');
-                    } else if ($budgetOut > $budgetProduct) {
+                    } else if ($budgetOut > $budgetAvailable) {
                         $this->session->set_flashdata('error', '<div class="alert alert-danger alert-dismissible fade in" role="alert">' .
                             '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>' .
                             '</button>' .
