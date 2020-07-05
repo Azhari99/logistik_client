@@ -143,8 +143,9 @@ class RequestOut extends CI_Controller
             $amount = $total;
             $instituteOut = $total + $sumInstituteOut;
             $budgetOut = $total;
+            $budgetAvailable = $produtDetail[0]['budget'];
         }
-        // var_dump($qty, $sumRequestOut->qtyentered, $sumQtyOut[0]['qtyentered'] );
+        // var_dump($budgetOut, $budgetAvailable );
         // die();
         $budgetIns = $instansiDetail[0]['budget'];
 
